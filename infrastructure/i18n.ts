@@ -12,6 +12,7 @@ export type UiText = {
   expandMenu: string;
   moduleEyebrow: string;
   visualizerTitle: string;
+  diagramLabel: string;
   mitigationsTitle: string;
   defensiveCoverage: string;
   step: string;
@@ -29,6 +30,11 @@ export type UiText = {
   language: string;
   exportReport: string;
   reportDownloaded: string;
+  reportModule: string;
+  reportSummary: string;
+  reportOutcome: string;
+  reportNoMitigations: string;
+  reportEthicalNote: string;
   metricsTitle: string;
   latency: string;
   availability: string;
@@ -475,6 +481,7 @@ export const uiTextByLocale: Record<Locale, UiText> = {
     expandMenu: "Mostrar menú",
     moduleEyebrow: "Módulo interactivo",
     visualizerTitle: "Simulación visual",
+    diagramLabel: "Diagrama de flujo del ataque",
     mitigationsTitle: "Mitigaciones",
     defensiveCoverage: "Cobertura defensiva",
     step: "Paso",
@@ -493,6 +500,12 @@ export const uiTextByLocale: Record<Locale, UiText> = {
     language: "Idioma",
     exportReport: "Exportar reporte",
     reportDownloaded: "Reporte educativo generado",
+    reportModule: "Módulo",
+    reportSummary: "Resumen",
+    reportOutcome: "Resultado",
+    reportNoMitigations: "No hay mitigaciones activas.",
+    reportEthicalNote:
+      "Nota ética: reporte educativo defensivo. No contiene payloads ni instrucciones ofensivas.",
     metricsTitle: "Métricas visuales",
     latency: "Latencia",
     availability: "Disponibilidad",
@@ -512,6 +525,7 @@ export const uiTextByLocale: Record<Locale, UiText> = {
     expandMenu: "Show menu",
     moduleEyebrow: "Interactive module",
     visualizerTitle: "Visual simulation",
+    diagramLabel: "Attack flow diagram",
     mitigationsTitle: "Mitigations",
     defensiveCoverage: "Defensive coverage",
     step: "Step",
@@ -530,6 +544,12 @@ export const uiTextByLocale: Record<Locale, UiText> = {
     language: "Language",
     exportReport: "Export report",
     reportDownloaded: "Educational report generated",
+    reportModule: "Module",
+    reportSummary: "Summary",
+    reportOutcome: "Outcome",
+    reportNoMitigations: "No mitigations enabled.",
+    reportEthicalNote:
+      "Ethical note: defensive educational report. It contains no payloads or offensive instructions.",
     metricsTitle: "Visual metrics",
     latency: "Latency",
     availability: "Availability",

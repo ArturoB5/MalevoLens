@@ -30,13 +30,13 @@ function buildReport({
     "MalevoLens",
     "==========",
     "",
-    `${locale === "es" ? "Modulo" : "Module"}: ${module.name}`,
-    `${locale === "es" ? "Resumen" : "Summary"}: ${module.summary}`,
+    `${text.reportModule}: ${module.name}`,
+    `${text.reportSummary}: ${module.summary}`,
     "",
     `${text.step}: ${step.title}`,
     step.description,
     "",
-    `${locale === "es" ? "Resultado" : "Outcome"}: ${evaluationCopy.label}`,
+    `${text.reportOutcome}: ${evaluationCopy.label}`,
     evaluationCopy.description,
     "",
     text.metricsTitle,
@@ -47,11 +47,9 @@ function buildReport({
     text.mitigationsTitle,
     ...(activeMitigations.length > 0
       ? activeMitigations.map((mitigation) => `- ${mitigation.title}: ${mitigation.description}`)
-      : [`- ${locale === "es" ? "No hay mitigaciones activas." : "No mitigations enabled."}`]),
+      : [`- ${text.reportNoMitigations}`]),
     "",
-    locale === "es"
-      ? "Nota ética: reporte educativo defensivo. No contiene payloads ni instrucciones ofensivas."
-      : "Ethical note: defensive educational report. It contains no payloads or offensive instructions."
+    text.reportEthicalNote
   ].join("\n");
 }
 

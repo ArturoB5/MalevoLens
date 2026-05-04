@@ -39,6 +39,7 @@ export function AttackVisualizer({ evaluation, module, step, text }: AttackVisua
       </div>
       <FlowDiagram
         actors={module.actors}
+        diagramLabel={text.diagramLabel}
         edges={module.edges}
         evaluation={evaluation}
         roleLabels={text.roles}

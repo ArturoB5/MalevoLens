@@ -6,6 +6,7 @@ import type { Actor, AttackEvaluation, FlowEdge, Step } from "@/domain/entities"
 
 type FlowDiagramProps = {
   actors: Actor[];
+  diagramLabel: string;
   edges: FlowEdge[];
   evaluation: AttackEvaluation;
   roleLabels: Record<Actor["role"], string>;
@@ -159,6 +160,7 @@ function ActorIcon({ role }: { role: Actor["role"] }) {
 
 export const FlowDiagram = memo(function FlowDiagram({
   actors,
+  diagramLabel,
   edges,
   evaluation,
   roleLabels,
@@ -187,7 +189,7 @@ export const FlowDiagram = memo(function FlowDiagram({
 
       <div className="grid place-items-center py-2">
         <svg
-          aria-label="Attack flow diagram"
+          aria-label={diagramLabel}
           className="h-[360px] w-full max-w-[900px]"
           preserveAspectRatio="xMidYMid meet"
           role="img"
