@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --app-bg: #070a12;
+  --surface-raised: #0d1320;
+  --surface-muted: #121a2a;
+  --surface-soft: rgba(255, 255, 255, 0.035);
+  --surface-soft-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.11);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --diagram-bg:
+    radial-gradient(circle at 50% 18%, rgba(56, 189, 248, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+  --page-bg:
+    linear-gradient(135deg, rgba(52, 211, 153, 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 32%),
+    #070a12;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --app-bg: #f7fbff;
+  --surface-raised: #ffffff;
+  --surface-muted: #edf4fb;
+  --surface-soft: rgba(15, 23, 42, 0.035);
+  --surface-soft-strong: rgba(15, 23, 42, 0.075);
+  --border: rgba(15, 23, 42, 0.12);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --diagram-bg:
+    radial-gradient(circle at 50% 18%, rgba(14, 165, 233, 0.15), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(232, 240, 248, 0.86));
+  --page-bg:
+    linear-gradient(135deg, rgba(16, 185, 129, 0.12), transparent 28%),
+    radial-gradient(circle at top right, rgba(14, 165, 233, 0.14), transparent 32%),
+    #f7fbff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--app-bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text-primary);
+  transition: background 180ms ease, color 180ms ease;
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.35);
+  color: #ffffff;
+}
+
+@layer components {
+  .bg-app {
+    background-color: var(--app-bg);
+  }
+
+  .bg-panel {
+    background-color: var(--surface-raised);
+  }
+
+  .bg-soft {
+    background-color: var(--surface-soft);
+  }
+
+  .bg-soft-strong {
+    background-color: var(--surface-soft-strong);
+  }
+
+  .border-default {
+    border-color: var(--border);
+  }
+
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .panel {
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--surface-raised);
+  }
+
+  .control-button {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface-soft);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+
+  .icon-button {
+    display: inline-grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface-soft);
+    color: var(--text-primary);
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+
+  .icon-button:hover {
+    background: var(--surface-soft-strong);
+  }
+
+  .control-button:hover {
+    background: var(--surface-soft-strong);
+  }
+
+  .control-button:focus-visible,
+  .icon-button:focus-visible,
+  .primary-button:focus-visible,
+  .segmented-control button:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 2px;
+  }
+
+  .primary-button {
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 0.5rem;
+    background: rgba(56, 189, 248, 0.15);
+    color: #0284c7;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    transition: background 160ms ease, opacity 160ms ease;
+  }
+
+  :root[data-theme="dark"] .primary-button,
+  :root:not([data-theme]) .primary-button {
+    color: #38bdf8;
+  }
+
+  .primary-button:hover {
+    background: rgba(56, 189, 248, 0.22);
+  }
+
+  .segmented-control {
+    display: inline-flex;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: var(--surface-soft);
+  }
+
+  .segmented-control button {
+    min-width: 2.75rem;
+    padding: 0.5rem 0.65rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    transition: background 160ms ease, color 160ms ease;
+  }
+
+  .segmented-control button.is-active {
+    background: rgba(56, 189, 248, 0.16);
+    color: #0284c7;
+  }
+
+  :root[data-theme="dark"] .segmented-control button.is-active,
+  :root:not([data-theme]) .segmented-control button.is-active {
+    color: #38bdf8;
+  }
+
+  .diagram-surface {
+    background: var(--diagram-bg);
+  }
+
+  .diagram-edge-label {
+    fill: var(--text-secondary);
+    paint-order: stroke;
+    stroke: var(--surface-raised);
+    stroke-width: 7px;
+    stroke-linejoin: round;
+  }
+}
