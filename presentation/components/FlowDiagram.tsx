@@ -17,6 +17,11 @@ type Point = {
   y: number;
 };
 
+type StageNode = Point & {
+  height: number;
+  width: number;
+};
+
 const roleClasses: Record<Actor["role"], string> = {
   user: "border-signal-normal/50 bg-signal-normal/10 text-signal-normal",
   service: "border-slate-400/40 bg-slate-400/10 text-primary",
@@ -24,10 +29,8 @@ const roleClasses: Record<Actor["role"], string> = {
   attacker: "border-signal-compromised/50 bg-signal-compromised/10 text-signal-compromised"
 };
 
-const nodeSize = {
-  width: "clamp(7rem, 13vw, 10rem)",
-  height: 86
-};
+const nodeWidth = 168;
+const nodeHeight = 112;
 
 const outcomeStroke: Record<AttackEvaluation["outcome"], string> = {
   normal: "#38bdf8",
@@ -38,34 +41,73 @@ const outcomeStroke: Record<AttackEvaluation["outcome"], string> = {
 
 function buildLayout(actors: Actor[]): Record<string, Point> {
   const presets: Point[] = [
-    { x: 22, y: 38 },
-    { x: 50, y: 38 },
-    { x: 78, y: 38 },
-    { x: 50, y: 72 }
+    { x: 210, y: 178 },
+    { x: 450, y: 178 },
+    { x: 690, y: 178 },
+    { x: 450, y: 318 }
   ];
 
   return actors.reduce<Record<string, Point>>((positions, actor, index) => {
     positions[actor.id] = presets[index] ?? {
-      x: 16 + (index % 3) * 34,
-      y: 28 + Math.floor(index / 3) * 32
+      x: 210 + (index % 3) * 240,
+      y: 178 + Math.floor(index / 3) * 140
     };
     return positions;
   }, {});
 }
 
-function getLineGeometry(from: Point, to: Point) {
+function getNodeBox(point: Point): StageNode {
+  return {
+    height: nodeHeight,
+    width: nodeWidth,
+    x: point.x,
+    y: point.y
+  };
+}
+
+function getAnchor(from: StageNode, to: StageNode) {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
+  const horizontal = Math.abs(dx) >= Math.abs(dy);
+
+  if (horizontal) {
+    return {
+      from: {
+        x: from.x + Math.sign(dx) * (from.width / 2 + 8),
+        y: from.y
+      },
+      to: {
+        x: to.x - Math.sign(dx) * (to.width / 2 + 14),
+        y: to.y
+      }
+    };
+  }
+
+  return {
+    from: {
+      x: from.x,
+      y: from.y + Math.sign(dy) * (from.height / 2 + 8)
+    },
+    to: {
+      x: to.x,
+      y: to.y - Math.sign(dy) * (to.height / 2 + 14)
+    }
+  };
+}
+
+function getLineGeometry(fromPoint: Point, toPoint: Point) {
+  const anchors = getAnchor(getNodeBox(fromPoint), getNodeBox(toPoint));
+  const dx = anchors.to.x - anchors.from.x;
+  const dy = anchors.to.y - anchors.from.y;
   const distance = Math.hypot(dx, dy) || 1;
-  const trim = 9.5;
-  const startX = from.x + (dx / distance) * trim;
-  const startY = from.y + (dy / distance) * trim;
-  const endX = to.x - (dx / distance) * trim;
-  const endY = to.y - (dy / distance) * trim;
-  const verticalCurve = Math.abs(dy) > 18 ? -7 : 0;
+  const startX = anchors.from.x;
+  const startY = anchors.from.y;
+  const endX = anchors.to.x;
+  const endY = anchors.to.y;
+  const verticalCurve = Math.abs(dy) > 80 ? -36 : 0;
   const angle = Math.atan2(dy, dx);
-  const arrowLength = 2.4;
-  const arrowWidth = 1.35;
+  const arrowLength = 12;
+  const arrowWidth = 7;
   const tip = { x: endX, y: endY };
   const back = {
     x: endX - Math.cos(angle) * arrowLength,
@@ -143,13 +185,13 @@ export const FlowDiagram = memo(function FlowDiagram({
         ))}
       </div>
 
-      <div className="grid place-items-center">
-      <div className="relative h-[300px] w-full max-w-[860px] sm:h-[320px]">
+      <div className="grid place-items-center py-2">
         <svg
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full"
-          preserveAspectRatio="none"
-          viewBox="0 0 100 100"
+          aria-label="Attack flow diagram"
+          className="h-[360px] w-full max-w-[900px]"
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          viewBox="0 0 900 460"
         >
           {edges.map((edge) => {
             const from = positions[edge.from];
@@ -183,42 +225,42 @@ export const FlowDiagram = memo(function FlowDiagram({
               </motion.g>
             );
           })}
-        </svg>
 
         {actors.map((actor) => {
           const point = positions[actor.id];
           const isHighlighted = highlightedActors.has(actor.id);
 
           return (
-            <motion.div
-              animate={{
-                scale: isHighlighted ? 1.04 : 1,
-                opacity: isHighlighted ? 1 : 0.78
-              }}
-              className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-xl border px-3 py-3 text-center shadow-lg backdrop-blur ${roleClasses[actor.role]} ${
-                isHighlighted ? "ring-2 ring-white/20" : ""
-              }`}
-              initial={false}
+            <foreignObject
+              height={nodeHeight + 16}
               key={actor.id}
-              style={{
-                left: `${point.x}%`,
-                minHeight: nodeSize.height,
-                top: `${point.y}%`,
-                width: nodeSize.width
-              }}
-              transition={{ duration: 0.34, ease: "easeOut" }}
+              width={nodeWidth + 16}
+              x={point.x - nodeWidth / 2 - 8}
+              y={point.y - nodeHeight / 2 - 8}
             >
-              <span className="mx-auto grid h-8 w-8 place-items-center rounded-lg border border-current/25 bg-white/10">
-                <ActorIcon role={actor.role} />
-              </span>
-              <span className="mt-2 block text-xs font-semibold uppercase tracking-wide opacity-70">
-                {roleLabels[actor.role]}
-              </span>
-              <span className="mt-1 block text-sm font-bold leading-5">{actor.label}</span>
-            </motion.div>
+              <motion.div
+                animate={{
+                  opacity: isHighlighted ? 1 : 0.78,
+                  scale: isHighlighted ? 1.03 : 1
+                }}
+                className={`flex h-[112px] w-[168px] flex-col items-center justify-center rounded-xl border px-3 py-3 text-center shadow-lg backdrop-blur ${roleClasses[actor.role]} ${
+                  isHighlighted ? "ring-2 ring-white/20" : ""
+                }`}
+                initial={false}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <span className="grid h-8 w-8 place-items-center rounded-lg border border-current/25 bg-white/10">
+                  <ActorIcon role={actor.role} />
+                </span>
+                <span className="mt-2 block text-xs font-semibold uppercase tracking-wide opacity-70">
+                  {roleLabels[actor.role]}
+                </span>
+                <span className="mt-1 block text-sm font-bold leading-5">{actor.label}</span>
+              </motion.div>
+            </foreignObject>
           );
         })}
-        </div>
+        </svg>
       </div>
     </div>
   );

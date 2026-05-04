@@ -67,7 +67,9 @@ Contiene componentes React dedicados a renderizado e interacción.
 - `ReportExportButton.tsx`: generación local de reportes educativos por módulo.
 - `PreferenceControls.tsx`: selector de idioma y modo claro/oscuro.
 - `ControlsPanel.tsx`: anterior, siguiente y reiniciar.
-- `Sidebar.tsx` y `Header.tsx`: navegación general.
+- `Sidebar.tsx` y `Header.tsx`: navegación general, branding y menú colapsable.
+- `MalevoLensLogo.tsx`: logo SVG de lupa enfocando una amenaza.
+- `Footer.tsx`: pie de página del producto.
 
 ## Estructura del Proyecto
 
@@ -92,7 +94,9 @@ Contiene componentes React dedicados a renderizado e interacción.
     ControlsPanel.tsx
     ExplanationPanel.tsx
     FlowDiagram.tsx
+    Footer.tsx
     Header.tsx
+    MalevoLensLogo.tsx
     MetricsPanel.tsx
     MitigationPanel.tsx
     PreferenceControls.tsx
@@ -139,7 +143,7 @@ npm run build
 
 La pantalla principal presenta una navegación lateral con los módulos disponibles. Cada módulo muestra un diagrama de flujo con actores y conexiones, un panel de explicación del paso actual, un panel de mitigaciones y métricas visuales de latencia, disponibilidad y confianza. Al avanzar la simulación, los nodos y conexiones relevantes se resaltan, y el estado puede cambiar entre normal, degradado, comprometido o bloqueado según las defensas activadas.
 
-El encabezado mantiene la marca a la izquierda y controles compactos a la derecha para alternar idioma y tema. La exportación de reportes genera un archivo local `.txt` con resumen, paso actual, estado, métricas y mitigaciones activas.
+El encabezado mantiene la marca a la izquierda con el sello "by Abalon Labs" y controles compactos a la derecha para alternar idioma y tema. La navegación lateral muestra solo las opciones de módulos y puede colapsarse para liberar espacio de lectura. La exportación de reportes genera un archivo local `.txt` con resumen, paso actual, estado, métricas y mitigaciones activas.
 
 ## Consideraciones Éticas
 
@@ -163,7 +167,7 @@ Los escenarios son abstraídos deliberadamente para ayudar a comprender la segur
 ## Autor
 
 Arturo Badillo  
-Avalon Labs
+Abalon Labs
 
 ## Licencia
 

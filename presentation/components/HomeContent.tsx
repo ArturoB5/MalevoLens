@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAppPreferences } from "./AppPreferencesProvider";
+import { MalevoLensLogo } from "./MalevoLensLogo";
 import { Sidebar } from "./Sidebar";
 
 export function HomeContent() {
@@ -16,7 +17,13 @@ export function HomeContent() {
           <p className="text-xs font-semibold uppercase tracking-wide text-signal-protected">
             {text.homeEyebrow}
           </p>
-          <h1 className="mt-3 text-4xl font-bold text-primary sm:text-5xl">{text.homeTitle}</h1>
+          <div className="mt-3 flex flex-wrap items-center gap-4">
+            <MalevoLensLogo size="lg" />
+            <div>
+              <h1 className="text-4xl font-bold text-primary sm:text-5xl">{text.homeTitle}</h1>
+              <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-secondary">by Abalon Labs</p>
+            </div>
+          </div>
           <p className="mt-5 text-base leading-7 text-secondary">{text.homeDescription}</p>
           {firstAttack ? (
             <Link className="primary-button mt-7 inline-flex" href={`/attacks/${firstAttack.id}`}>

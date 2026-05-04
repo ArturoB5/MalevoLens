@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "@/presentation/components/Header";
 import { AppPreferencesProvider } from "@/presentation/components/AppPreferencesProvider";
+import { Footer } from "@/presentation/components/Footer";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -18,7 +19,8 @@ export default function RootLayout({
       <body>
         <AppPreferencesProvider>
           <Header />
-          {children}
+          <div className="min-h-[calc(100vh-129px)]">{children}</div>
+          <Footer />
         </AppPreferencesProvider>
       </body>
     </html>

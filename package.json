@@ -4,6 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "stop": "node scripts/stop-workspace-node.mjs",
+    "clean": "node scripts/clean-next-cache.mjs",
+    "dev:clean": "npm run stop && npm run clean && next dev",
+    "build:clean": "npm run stop && npm run clean && next build",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

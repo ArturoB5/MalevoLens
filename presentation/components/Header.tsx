@@ -2,18 +2,17 @@
 
 import Link from "next/link";
 import { PreferenceControls } from "./PreferenceControls";
-import { useAppPreferences } from "./AppPreferencesProvider";
+import { MalevoLensLogo } from "./MalevoLensLogo";
 
 export function Header() {
   return (
     <header className="border-b border-default bg-app/90 backdrop-blur">
       <div className="flex w-full items-center justify-between gap-3 px-4 py-4 sm:px-6">
         <Link className="group inline-flex items-center gap-3" href="/">
-          <span className="grid h-10 w-10 place-items-center rounded-lg border border-signal-normal/40 bg-signal-normal/10 text-sm font-bold text-signal-normal shadow-glow">
-            ML
-          </span>
+          <MalevoLensLogo />
           <span>
             <span className="block text-lg font-semibold tracking-wide text-primary">MalevoLens</span>
+            <span className="block text-xs font-semibold uppercase tracking-wide text-secondary">by Abalon Labs</span>
           </span>
         </Link>
         <PreferenceControls />

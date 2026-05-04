@@ -8,6 +8,8 @@ export type UiText = {
   appSubtitle: string;
   ethicalBadge: string;
   attackNavigation: string;
+  collapseMenu: string;
+  expandMenu: string;
   moduleEyebrow: string;
   visualizerTitle: string;
   mitigationsTitle: string;
@@ -469,6 +471,8 @@ export const uiTextByLocale: Record<Locale, UiText> = {
     appSubtitle: "Simulaciones defensivas de seguridad web",
     ethicalBadge: "Educativo y no ofensivo",
     attackNavigation: "Módulos de ataque",
+    collapseMenu: "Ocultar menú",
+    expandMenu: "Mostrar menú",
     moduleEyebrow: "Módulo interactivo",
     visualizerTitle: "Simulación visual",
     mitigationsTitle: "Mitigaciones",
@@ -504,6 +508,8 @@ export const uiTextByLocale: Record<Locale, UiText> = {
     appSubtitle: "Defensive web security simulations",
     ethicalBadge: "Educational and non-offensive",
     attackNavigation: "Attack modules",
+    collapseMenu: "Hide menu",
+    expandMenu: "Show menu",
     moduleEyebrow: "Interactive module",
     visualizerTitle: "Visual simulation",
     mitigationsTitle: "Mitigations",
