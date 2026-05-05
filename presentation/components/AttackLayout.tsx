@@ -53,13 +53,13 @@ export function AttackLayout({ module }: AttackLayoutProps) {
             step={attackState.currentStep}
             text={text}
           />
-          <MetricsPanel metrics={attackState.metrics} text={text} />
           <StepController
             currentStepIndex={attackState.stepIndex}
             onSelectStep={attackState.goToStep}
             steps={module.steps}
             text={text}
           />
+          <MetricsPanel metrics={attackState.metrics} text={text} />
         </div>
 
         <div className="space-y-5">

@@ -4,6 +4,7 @@ export const attackModules: AttackModule[] = [
   {
     id: "sql-injection",
     name: "SQL Injection",
+    category: "injection",
     summary:
       "Visualiza cómo una entrada no validada puede alterar la intención de una consulta y cómo los controles defensivos rompen ese camino.",
     actors: [
@@ -76,6 +77,7 @@ export const attackModules: AttackModule[] = [
   {
     id: "ddos",
     name: "DDoS",
+    category: "availability",
     summary:
       "Explora cómo muchas solicitudes simultáneas pueden degradar un servicio y qué capas ayudan a absorber o limitar el tráfico.",
     actors: [
@@ -148,6 +150,7 @@ export const attackModules: AttackModule[] = [
   {
     id: "mitm",
     name: "Man-in-the-Middle",
+    category: "transport",
     summary:
       "Muestra cómo una comunicación sin protección puede ser observada conceptualmente y cómo HTTPS y certificados restauran confianza.",
     actors: [
@@ -220,6 +223,7 @@ export const attackModules: AttackModule[] = [
   {
     id: "xss",
     name: "XSS conceptual",
+    category: "client",
     summary:
       "Muestra cómo contenido no confiable puede llegar a la interfaz y cómo escape, sanitización y políticas de contenido reducen el riesgo.",
     actors: [
@@ -292,6 +296,7 @@ export const attackModules: AttackModule[] = [
   {
     id: "csrf",
     name: "CSRF",
+    category: "session",
     summary:
       "Explica cómo una acción autenticada puede ser inducida conceptualmente y cómo tokens, SameSite y confirmación de intención protegen el flujo.",
     actors: [
@@ -364,6 +369,7 @@ export const attackModules: AttackModule[] = [
   {
     id: "auth-failures",
     name: "Fallos de autenticación",
+    category: "access",
     summary:
       "Visualiza fallos comunes de control de acceso y autenticación de manera conceptual, junto con defensas de sesión, MFA y autorización.",
     actors: [
@@ -429,6 +435,295 @@ export const attackModules: AttackModule[] = [
         id: "policy-authorization",
         title: "Autorización por política",
         description: "Validar permisos por acción y recurso, no solo por presencia de sesión.",
+        enabled: false
+      }
+    ]
+  },
+  {
+    id: "ssrf",
+    name: "SSRF conceptual",
+    category: "access",
+    summary:
+      "Muestra cómo una aplicación que consulta recursos externos debe validar destinos para evitar accesos internos no intencionados.",
+    actors: [
+      { id: "user", label: "Usuario", role: "user" },
+      { id: "app", label: "Aplicación", role: "service" },
+      { id: "internal", label: "Recurso interno", role: "service" },
+      { id: "attacker", label: "Entrada no confiable", role: "attacker" }
+    ],
+    edges: [
+      { id: "safe-url", from: "user", to: "app", label: "Destino permitido" },
+      { id: "untrusted-target", from: "attacker", to: "app", label: "Destino no validado" },
+      { id: "server-request", from: "app", to: "internal", label: "Solicitud del servidor" },
+      { id: "blocked-target", from: "app", to: "user", label: "Destino bloqueado" }
+    ],
+    steps: [
+      {
+        id: "allowed-target",
+        title: "Destino esperado",
+        description:
+          "La aplicación solicita un recurso externo permitido y mantiene el flujo dentro de una lista de destinos confiables.",
+        highlights: { actors: ["user", "app"], edges: ["safe-url"] },
+        outcome: "normal"
+      },
+      {
+        id: "untrusted-target",
+        title: "Destino no confiable",
+        description:
+          "La simulación representa una URL o destino manipulado de forma abstracta, sin incluir rutas reales ni técnicas ofensivas.",
+        highlights: { actors: ["attacker", "app"], edges: ["untrusted-target"] },
+        outcome: "compromised"
+      },
+      {
+        id: "internal-reach",
+        title: "Acceso no intencionado",
+        description:
+          "Si la aplicación confía en el destino recibido, podría intentar acceder a recursos internos que no deberían exponerse.",
+        highlights: { actors: ["app", "internal"], edges: ["server-request"] },
+        outcome: "compromised"
+      },
+      {
+        id: "egress-controlled",
+        title: "Egreso controlado",
+        description:
+          "Listas permitidas, segmentación de red y validación de destinos reducen el riesgo de solicitudes no autorizadas.",
+        highlights: { actors: ["app", "user"], edges: ["blocked-target"] },
+        outcome: "blocked"
+      }
+    ],
+    mitigations: [
+      {
+        id: "allowlisted-destinations",
+        title: "Destinos permitidos",
+        description: "Permitir solo dominios, protocolos y rangos explícitamente aprobados.",
+        enabled: false
+      },
+      {
+        id: "egress-filtering",
+        title: "Filtrado de egreso",
+        description: "Limitar desde infraestructura qué redes puede consultar la aplicación.",
+        enabled: false
+      },
+      {
+        id: "response-minimization",
+        title: "Respuesta mínima",
+        description: "Evitar devolver detalles internos de solicitudes fallidas o bloqueadas.",
+        enabled: false
+      }
+    ]
+  },
+  {
+    id: "path-traversal",
+    name: "Path Traversal conceptual",
+    category: "access",
+    summary:
+      "Explica cómo el acceso a archivos debe restringirse a rutas esperadas y cómo normalización y listas permitidas protegen el sistema.",
+    actors: [
+      { id: "user", label: "Usuario", role: "user" },
+      { id: "app", label: "Aplicación", role: "service" },
+      { id: "files", label: "Archivos permitidos", role: "database" },
+      { id: "attacker", label: "Ruta manipulada", role: "attacker" }
+    ],
+    edges: [
+      { id: "safe-file", from: "user", to: "app", label: "Archivo permitido" },
+      { id: "unsafe-file", from: "attacker", to: "app", label: "Ruta no confiable" },
+      { id: "file-access", from: "app", to: "files", label: "Lectura controlada" },
+      { id: "path-blocked", from: "app", to: "user", label: "Ruta rechazada" }
+    ],
+    steps: [
+      {
+        id: "allowed-file",
+        title: "Archivo esperado",
+        description: "El usuario solicita un recurso permitido dentro de un directorio controlado por la aplicación.",
+        highlights: { actors: ["user", "app"], edges: ["safe-file"] },
+        outcome: "normal"
+      },
+      {
+        id: "path-input",
+        title: "Ruta no confiable",
+        description:
+          "La simulación muestra una ruta manipulada de forma conceptual, sin nombres reales de archivos ni instrucciones de abuso.",
+        highlights: { actors: ["attacker", "app"], edges: ["unsafe-file"] },
+        outcome: "compromised"
+      },
+      {
+        id: "path-risk",
+        title: "Límite de directorio",
+        description:
+          "Sin controles, la aplicación podría intentar resolver archivos fuera del espacio permitido.",
+        highlights: { actors: ["app", "files"], edges: ["file-access"] },
+        outcome: "compromised"
+      },
+      {
+        id: "path-safe",
+        title: "Acceso restringido",
+        description:
+          "Normalizar rutas, usar identificadores internos y validar contra listas permitidas mantiene el acceso acotado.",
+        highlights: { actors: ["app", "user"], edges: ["path-blocked"] },
+        outcome: "blocked"
+      }
+    ],
+    mitigations: [
+      {
+        id: "canonical-paths",
+        title: "Normalización de rutas",
+        description: "Resolver rutas canónicas y comprobar que sigan dentro del directorio permitido.",
+        enabled: false
+      },
+      {
+        id: "file-ids",
+        title: "Identificadores internos",
+        description: "Usar IDs de archivo en lugar de aceptar rutas directas del usuario.",
+        enabled: false
+      },
+      {
+        id: "storage-boundary",
+        title: "Límite de almacenamiento",
+        description: "Aislar archivos públicos de secretos, configuración o archivos del sistema.",
+        enabled: false
+      }
+    ]
+  },
+  {
+    id: "insecure-upload",
+    name: "Carga insegura de archivos",
+    category: "configuration",
+    summary:
+      "Visualiza cómo una carga de archivos debe validarse antes de almacenarse o publicarse.",
+    actors: [
+      { id: "user", label: "Usuario", role: "user" },
+      { id: "upload", label: "Servicio de carga", role: "service" },
+      { id: "storage", label: "Almacenamiento", role: "database" },
+      { id: "attacker", label: "Archivo riesgoso", role: "attacker" }
+    ],
+    edges: [
+      { id: "safe-upload", from: "user", to: "upload", label: "Archivo esperado" },
+      { id: "risky-upload", from: "attacker", to: "upload", label: "Contenido no confiable" },
+      { id: "store-file", from: "upload", to: "storage", label: "Almacenamiento" },
+      { id: "reject-file", from: "upload", to: "user", label: "Carga rechazada" }
+    ],
+    steps: [
+      {
+        id: "valid-upload",
+        title: "Carga esperada",
+        description: "El usuario sube un archivo permitido y la aplicación lo procesa con reglas conocidas.",
+        highlights: { actors: ["user", "upload"], edges: ["safe-upload"] },
+        outcome: "normal"
+      },
+      {
+        id: "risky-file",
+        title: "Archivo no confiable",
+        description:
+          "La simulación representa contenido riesgoso de forma abstracta, sin ejemplos ejecutables ni instrucciones ofensivas.",
+        highlights: { actors: ["attacker", "upload"], edges: ["risky-upload"] },
+        outcome: "compromised"
+      },
+      {
+        id: "unsafe-storage",
+        title: "Publicación prematura",
+        description:
+          "Si se almacena o sirve el archivo sin validación, puede aumentar el riesgo para usuarios y servicios.",
+        highlights: { actors: ["upload", "storage"], edges: ["store-file"] },
+        outcome: "degraded"
+      },
+      {
+        id: "validated-upload",
+        title: "Carga validada",
+        description:
+          "Validación de tipo, tamaño, escaneo, nombres seguros y almacenamiento aislado reducen el riesgo.",
+        highlights: { actors: ["upload", "user"], edges: ["reject-file"] },
+        outcome: "blocked"
+      }
+    ],
+    mitigations: [
+      {
+        id: "type-size-validation",
+        title: "Validación de tipo y tamaño",
+        description: "Aceptar solo tipos esperados y límites de tamaño razonables.",
+        enabled: false
+      },
+      {
+        id: "isolated-storage",
+        title: "Almacenamiento aislado",
+        description: "Guardar archivos en espacios sin permisos de ejecución ni acceso a secretos.",
+        enabled: false
+      },
+      {
+        id: "safe-names",
+        title: "Nombres seguros",
+        description: "Generar nombres internos y evitar usar nombres enviados directamente.",
+        enabled: false
+      }
+    ]
+  },
+  {
+    id: "security-misconfiguration",
+    name: "Configuración insegura",
+    category: "configuration",
+    summary:
+      "Muestra cómo configuraciones por defecto, errores verbosos o permisos amplios pueden ampliar la exposición.",
+    actors: [
+      { id: "admin", label: "Equipo técnico", role: "user" },
+      { id: "app", label: "Aplicación", role: "service" },
+      { id: "logs", label: "Observabilidad", role: "database" },
+      { id: "attacker", label: "Reconocimiento hostil", role: "attacker" }
+    ],
+    edges: [
+      { id: "baseline-config", from: "admin", to: "app", label: "Configuración segura" },
+      { id: "verbose-errors", from: "app", to: "attacker", label: "Señales innecesarias" },
+      { id: "monitoring", from: "app", to: "logs", label: "Eventos controlados" },
+      { id: "hardened", from: "admin", to: "logs", label: "Revisión continua" }
+    ],
+    steps: [
+      {
+        id: "secure-baseline",
+        title: "Base segura",
+        description: "El equipo configura valores mínimos, permisos acotados y mensajes controlados.",
+        highlights: { actors: ["admin", "app"], edges: ["baseline-config"] },
+        outcome: "normal"
+      },
+      {
+        id: "verbose-signal",
+        title: "Señales excesivas",
+        description:
+          "Errores verbosos o configuraciones por defecto pueden revelar contexto innecesario sin mostrar explotación real.",
+        highlights: { actors: ["app", "attacker"], edges: ["verbose-errors"] },
+        outcome: "degraded"
+      },
+      {
+        id: "wide-exposure",
+        title: "Exposición ampliada",
+        description:
+          "Permisos amplios, servicios innecesarios o secretos mal ubicados elevan el impacto potencial.",
+        highlights: { actors: ["app", "logs"], edges: ["monitoring"] },
+        outcome: "compromised"
+      },
+      {
+        id: "hardened-review",
+        title: "Endurecimiento continuo",
+        description:
+          "Revisiones de configuración, monitoreo y mínimos privilegios reducen exposición acumulada.",
+        highlights: { actors: ["admin", "logs"], edges: ["hardened"] },
+        outcome: "blocked"
+      }
+    ],
+    mitigations: [
+      {
+        id: "secure-defaults",
+        title: "Valores seguros",
+        description: "Desactivar funciones innecesarias y controlar mensajes de error.",
+        enabled: false
+      },
+      {
+        id: "secret-hygiene",
+        title: "Higiene de secretos",
+        description: "Mantener secretos fuera del código y rotarlos cuando sea necesario.",
+        enabled: false
+      },
+      {
+        id: "configuration-review",
+        title: "Revisión continua",
+        description: "Auditar cambios de configuración y permisos como parte del ciclo de entrega.",
         enabled: false
       }
     ]

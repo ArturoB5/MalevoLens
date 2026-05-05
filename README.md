@@ -9,7 +9,7 @@ Ejecución local: `npm install` y `npm run dev`.
 
 ## Características Principales
 
-- Simulaciones visuales para SQL Injection, DDoS, Man-in-the-Middle, XSS conceptual, CSRF y fallos de autenticacion.
+- Simulaciones visuales para SQL Injection, DDoS, Man-in-the-Middle, XSS conceptual, CSRF, fallos de autenticacion, SSRF conceptual, Path Traversal conceptual, carga insegura de archivos y configuracion insegura.
 - Explicaciones claras orientadas a defensa y mitigación.
 - Abstracción común para actores, conexiones, pasos y controles defensivos.
 - Activación interactiva de mitigaciones y evaluación del resultado del ataque.
@@ -17,6 +17,7 @@ Ejecución local: `npm install` y `npm run dev`.
 - Selector de idioma en español e ingles.
 - Métricas visuales por módulo: latencia, disponibilidad y confianza.
 - Exportación de reportes educativos por módulo.
+- Navegación agrupada por tipo de amenaza para facilitar exploración.
 - Diseño responsive, mobile-first y accesible por teclado.
 - Animaciones determinísticas con Framer Motion.
 - Ejecución local sin servicios externos.
@@ -161,7 +162,7 @@ Los escenarios son abstraídos deliberadamente para ayudar a comprender la segur
 
 - Añadir pruebas unitarias para reglas de dominio.
 - Incorporar modo de evaluación con preguntas defensivas.
-- Agregar persistencia opcional del progreso del usuario.
+- Agregar persistencia "opcional" del progreso del usuario.
 - Añadir capturas automatizadas para documentar cambios visuales.
 
 ## Autor

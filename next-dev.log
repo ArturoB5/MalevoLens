@@ -21,3 +21,4 @@
  GET /attacks/auth-failures 200 in 262ms
  GET /attacks/sql-injection 200 in 154ms
  GET /attacks/mitm 200 in 67ms
+[?25h
