@@ -7,7 +7,10 @@ import "@/styles/globals.css";
 export const metadata: Metadata = {
   title: "MalevoLens",
   description:
-    "Aplicación educativa para visualizar ataques web comunes y mitigaciones defensivas. Educational app for visualizing common web attacks and defensive mitigations."
+    "Aplicación educativa para visualizar ataques web comunes y mitigaciones defensivas. Educational app for visualizing common web attacks and defensive mitigations.",
+  icons: {
+    icon: "/icon.svg"
+  }
 };
 
 export default function RootLayout({
